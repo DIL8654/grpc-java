@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package greet;
+option  java_package = "com.proto.greet";
+option java_multiple_files = true;
+
+
+message Greeting {
+  string firstName = 1;
+  string lastName = 2;
+}
+
+message GreetRequest{
+  Greeting greeting = 1;
+}
+
+message GreetResonse {
+  string result = 1;
+}
+
+service GreetService{
+  //Unary
+  rpc Greet(GreetRequest) returns (GreetResonse){};
+}

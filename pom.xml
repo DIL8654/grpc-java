@@ -42,6 +42,12 @@
             <artifactId>protobuf-java-util</artifactId>
             <version>${protobuf.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-netty</artifactId>
+            <version>1.42.0</version>
+        </dependency>
+
 
         <dependency>
             <!-- Java 9+ compatibility - Do NOT update to 2.0.0 -->
