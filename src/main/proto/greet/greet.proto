@@ -18,7 +18,18 @@ message GreetResonse {
   string result = 1;
 }
 
+message GreetMenyTimeRequest
+{
+  Greeting greeting = 1;
+}
+message GreetMenyTimeResponse
+{
+  string result = 1;
+}
 service GreetService{
   //Unary
   rpc Greet(GreetRequest) returns (GreetResonse){};
+
+  // server streams
+  rpc GreetManyTimes(GreetMenyTimeRequest) returns (stream GreetMenyTimeResponse){};
 }

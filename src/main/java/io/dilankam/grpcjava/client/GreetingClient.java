@@ -1,10 +1,7 @@
 package io.dilankam.grpcjava.client;
 
 import com.proto.dummy.DummyServiceGrpc;
-import com.proto.greet.GreetRequest;
-import com.proto.greet.GreetResonse;
-import com.proto.greet.GreetServiceGrpc;
-import com.proto.greet.Greeting;
+import com.proto.greet.*;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 
@@ -18,26 +15,39 @@ public class GreetingClient {
 
     ManagedChannel channel =
         ManagedChannelBuilder.forAddress("localhost", 50051).usePlaintext().build();
+    // Unary
+    //    //    DummyServiceGrpc.DummyServiceBlockingStub syncClient =
+    //    //        DummyServiceGrpc.newBlockingStub(channel);
+    //
+    //    //      DummyServiceGrpc.DummyServiceFutureStub asyncClient =
+    //    // DummyServiceGrpc.newFutureStub(channel);
+    //
+        // create greet service client ( blockig- synchronous)
+        GreetServiceGrpc.GreetServiceBlockingStub greetClient =
+            GreetServiceGrpc.newBlockingStub(channel);
+    //    // create proto buff greeting message
+    //    Greeting greeting =
+    //        Greeting.newBuilder().setFirstName("AngryBird").setLastName("Github").build();
+    //    // create Greet request - proto buff
+    //    GreetRequest greetRequest = GreetRequest.newBuilder().setGreeting(greeting).build();
+    //
+    //    // call RPC
+    //    GreetResonse greetResponse = greetClient.greet(greetRequest);
+    //    System.out.println(greetResponse.getResult());
 
-    //    DummyServiceGrpc.DummyServiceBlockingStub syncClient =
-    //        DummyServiceGrpc.newBlockingStub(channel);
+    // server streaming
 
-    //      DummyServiceGrpc.DummyServiceFutureStub asyncClient =
-    // DummyServiceGrpc.newFutureStub(channel);
-
-    // create greet service client ( blockig- synchronous)
-    GreetServiceGrpc.GreetServiceBlockingStub greetClient =
-        GreetServiceGrpc.newBlockingStub(channel);
-    // create proto buff greeting message
-    Greeting greeting =
-        Greeting.newBuilder().setFirstName("AngryBird").setLastName("Github").build();
-    // create Greet request - proto buff
-    GreetRequest greetRequest = GreetRequest.newBuilder().setGreeting(greeting).build();
-
-    // call RPC
-    GreetResonse greetResponse = greetClient.greet(greetRequest);
-    System.out.println(greetResponse.getResult());
-
+    GreetMenyTimeRequest greetMenyTimeRequest =
+        GreetMenyTimeRequest.newBuilder()
+            .setGreeting(Greeting.newBuilder().setFirstName("Streaming Client"))
+            .build();
+    // stream the responses by blocking manner
+    greetClient
+        .greetManyTimes(greetMenyTimeRequest)
+        .forEachRemaining(
+            response -> {
+              System.out.println(response.getResult());
+            });
     // do something
     System.out.println("shutting down the channel");
     channel.shutdown(); // shutdown the connection

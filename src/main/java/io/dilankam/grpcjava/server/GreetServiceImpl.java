@@ -1,9 +1,6 @@
 package io.dilankam.grpcjava.server;
 
-import com.proto.greet.GreetRequest;
-import com.proto.greet.GreetResonse;
-import com.proto.greet.GreetServiceGrpc;
-import com.proto.greet.Greeting;
+import com.proto.greet.*;
 import io.grpc.stub.StreamObserver;
 
 /**
@@ -20,11 +17,30 @@ public class GreetServiceImpl extends GreetServiceGrpc.GreetServiceImplBase {
     String result = "Hello " + firstName;
 
     GreetResonse resonse = GreetResonse.newBuilder().setResult(result).build();
-    //send the response
+    // send the response
     responseObserver.onNext(resonse);
 
     // complete the RPC call
     responseObserver.onCompleted();
+  }
 
+  @Override
+  public void greetManyTimes(
+      GreetMenyTimeRequest request, StreamObserver<GreetMenyTimeResponse> responseObserver) {
+    String firstName = request.getGreeting().getFirstName();
+
+    try {
+      for (int i = 0; i < 10; i++) {
+        String result = "Hello " + firstName + ", response number: " + i;
+        GreetMenyTimeResponse response =
+            GreetMenyTimeResponse.newBuilder().setResult(result).build();
+        responseObserver.onNext(response);
+        Thread.sleep(1000L);
+      }
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    } finally {
+      responseObserver.onCompleted();
+    }
   }
 }
