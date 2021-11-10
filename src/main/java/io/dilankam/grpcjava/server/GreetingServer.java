@@ -13,7 +13,7 @@ public class GreetingServer {
 
   public static void main(String[] args) throws IOException, InterruptedException {
     System.out.println("Hello gRPC server");
-      Server server = ServerBuilder.forPort(50051).addService(new GreetServiceImpl()).build();
+      Server server = ServerBuilder.forPort(50051).addService(new GreetServiceImpl()).addService(new CalculatorServiceImpl()).build();
 
       server.start();
 
